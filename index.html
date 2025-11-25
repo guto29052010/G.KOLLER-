@@ -29,94 +29,83 @@
           <p>Carregando conteúdo...</p>
         </div>
       </main>
-      
-      <script>
-      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwnXnqlUOzvLxqL7UDYgOVz9puERDAaitdWjQI721V_syZehmBzllK0LC8OBEySUMfN/exec"; // substitua pela URL do seu Apps Script
-      
-      async function carregarConteudo() {
-        const container = document.getElementById('conteudo');
-        container.innerHTML = "<p>Carregando conteúdo...</p>";
-      
-        try {
-          const res = await fetch(SCRIPT_URL);
-          const dados = await res.json();
-          container.innerHTML = '';
-      
-          dados.forEach(item => {
-            const bloco = document.createElement('div');
-            bloco.className = 'bloco-item';
-      
-            const titulo = document.createElement('h2');
-            titulo.textContent = item.Titulo || '';
-            bloco.appendChild(titulo);
-      
-            const descricao = document.createElement('p');
-            descricao.textContent = item.Descricao || '';
-            bloco.appendChild(descricao);
-              
-      if (item.Url && item.Url.startsWith('http')) {
-  const youtubeRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
+         
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwnXnqlUOzvLxqL7UDYgOVz9puERDAaitdWjQI721V_syZehmBzllK0LC8OBEySUMfN/exec"; // substitua pela URL do seu Apps Script
 
-  const match = item.Url.match(youtubeRegex);
-  if (match) {
-    const videoId = match[1];
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${videoId}`;
-    iframe.height = "315";
-    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-    iframe.setAttribute("allowfullscreen", true);
-    bloco.appendChild(iframe);
-  }
-  else if (item.Url.match(/\.(jpg|jpeg|png|gif|webp)$/i) || item.Url.includes('unsplash')) {
-    const img = document.createElement('img');
-    img.src = item.Url;
-    img.alt = item.Título || 'Imagem';
-    bloco.appendChild(img);
-  }
-  else {
-    const link = document.createElement('a');
-    link.href = item.Url;
-    link.textContent = 'Ver mais';
-    bloco.appendChild(link);
-  }
-}
+    async function carregarConteudo() {
+      const container = document.getElementById('conteudo');
+      container.innerHTML = "<p>Carregando conteúdo...</p>";
 
-            container.appendChild(bloco);
-          });
-        } catch (err) {
-          container.innerHTML = "<p>Erro ao carregar dados: " + err.message + "</p>";
-        }
+      try {
+        const res = await fetch(SCRIPT_URL);
+        const dados = await res.json();
+        container.innerHTML = '';
+
+        dados.forEach(item => {
+          const bloco = document.createElement('div');
+          bloco.className = 'bloco-item';
+
+          const titulo = document.createElement('h2');
+          titulo.textContent = item.Título || '';
+          bloco.appendChild(titulo);
+
+          const descricao = document.createElement('p');
+          descricao.textContent = item.Descrição || '';
+          bloco.appendChild(descricao);
+
+          if (item.Url && item.Url.startsWith('http')) {
+            const youtubeRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
+
+            const match = item.Url.match(youtubeRegex);
+            if (match) {
+              const videoId = match[1];
+              const iframe = document.createElement('iframe');
+              iframe.src = `https://www.youtube.com/embed/${videoId}`;
+              iframe.height = "315";
+              iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+              iframe.setAttribute("allowfullscreen", true);
+              bloco.appendChild(iframe);
+            }
+            else if (item.Url.match(/\.(jpg|jpeg|png|gif|webp)$/i) || item.Url.includes('unsplash')) {
+              const img = document.createElement('img');
+              img.src = item.Url;
+              img.alt = item.Título || 'Imagem';
+              bloco.appendChild(img);
+            }
+            else {
+              const link = document.createElement('a');
+              link.href = item.Url;
+              link.textContent = 'Ver mais';
+              bloco.appendChild(link);
+            }
+          }
+
+          container.appendChild(bloco);
+        });
+      } catch (err) {
+        container.innerHTML = "<p>Erro ao carregar dados: " + err.message + "</p>";
       }
-      
-  const toggle = document.getElementById("tema-toggle");
-  const body = document.body;
+    }
 
-  // Carregar tema salvo
-  let tema = localStorage.getItem("tema") || "tema-claro";
-  if (tema === "tema-escuro") body.classList.add("tema-escuro");
+    carregarConteudo();
+  </script>
 
-  toggle.addEventListener("click", () => {
-    body.classList.toggle("tema-escuro");
+  <script>
+    const toggle = document.getElementById("tema-toggle");
+    const body = document.body;
 
-    const ativo = body.classList.contains("tema-escuro");
-    localStorage.setItem("tema", ativo ? "tema-escuro" : "tema-claro");
-  });
-     
-  const toggle = document.getElementById("tema-toggle");
-  const body = document.body;
+    // Carregar tema salvo
+    let tema = localStorage.getItem("tema") || "tema-claro";
+    if (tema === "tema-escuro") body.classList.add("tema-escuro");
 
-  // Carregar tema salvo
-  let tema = localStorage.getItem("tema") || "tema-claro";
-  if (tema === "tema-escuro") body.classList.add("tema-escuro");
+    toggle.addEventListener("click", () => {
+      body.classList.toggle("tema-escuro");
 
-  toggle.addEventListener("click", () => {
-    body.classList.toggle("tema-escuro");
-
-    const ativo = body.classList.contains("tema-escuro");
-    localStorage.setItem("tema", ativo ? "tema-escuro" : "tema-claro");
-  });   
-          carregarConteudo();
-</script>
+      const ativo = body.classList.contains("tema-escuro");
+      localStorage.setItem("tema", ativo ? "tema-escuro" : "tema-claro");
+    });
+  </script>
 
     <!-- Rodapé -->
     <footer>
